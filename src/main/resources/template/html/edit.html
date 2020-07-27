@@ -1,0 +1,38 @@
+	<div id="page-content">
+			<div class="col-lg-12">
+		        <div class="panel">
+		            <div class="panel-heading">
+		                <h3 class="panel-title" style="text-align: right;">
+		                	#('#')@installPJaxGoBackBtn()
+							#('#')@installFlowHisBtn(defId,procInsId)
+							#('#')@installAttachment(o?o.id:'')
+		                </h3>
+		            </div>
+					#('#')@buildFormPanelContainer("名片印刷申请单","/WEB-INF/admin/oa/apply/businesscard/editForm.html")
+					#('#')@buildWorkFlowHisTable(hislist)
+		        </div>
+		    </div>
+	</div>
+	<script>
+		function save(){
+			var data = common_ajax.ajaxFunc("/admin/#(parentPackageName)/save", $('#editForm').serialize(), "json", null);
+			if(data.success){
+				pointLion.alertMsg("保存成功!" , "success" , "small" , function(){
+					location.href = ctx+'/admin/#(parentPackageName)/getListPage';//跳转到列表页
+				},data);
+			}else{
+				pointLion.alertMsg(data.message , "danger" , "small" , function(){
+					$(".btn").removeAttr("disabled");
+				},data);
+			}
+		}
+		$(document).ready(function() {
+			$('#editForm').bootstrapValidator({
+	            fields: {
+	            }
+	        }).on("success.form.bv", function (e) {
+	            save();
+	            return false;//阻止表单跳转
+	        });
+		});
+	</script>

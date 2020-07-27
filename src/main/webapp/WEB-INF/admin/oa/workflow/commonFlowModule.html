@@ -1,0 +1,125 @@
+
+<!--查看流程流转历史按钮-->
+#define installFlowHisBtn(defId,procInsId)
+	#if(procInsId)
+		<a href="javascript:void(0);" onclick="pointLion.openTaskHisListPage('#(procInsId)')">
+			<button class="btn btn-success" type="button">流转</button>
+		</a>
+	#end
+#end
+<!--流程流转历史表格-->
+#define buildWorkFlowHisTable(procInsId,hislist)
+	#if(hislist)
+		<div class="panel skin-border form-panel">
+			<div class="panel-heading form-panel-header skin-bgcolor">
+				<h3 class="panel-title">流程图进度</h3>
+			</div>
+			<div class="panel-body">
+				<img class="workFlow-flowImg" src="#(ctx)/admin/oa/workflow/flowimg/getFlowImg?processInstanceId=#(procInsId)">
+			</div>
+		</div>
+		<div class="panel skin-border form-panel">
+			<div class="panel-heading form-panel-header skin-bgcolor">
+				<h3 class="panel-title">申请单流转历史</h3>
+			</div>
+			<div class="panel-body">
+				<div class="modal-body">
+					<div class="fixed-table-container bootstrap-table" style="padding-bottom: 0px;">
+						<table id="treetable" class="demo-add-niftycheck table table-hover table-striped">
+							<thead>
+							<tr>
+								<th style="width: 100px;"><div class="th-inner">任务名称</div></th>
+								<th style="width: 100px;"><div class="th-inner">办理人</div></th>
+								<th style="width: 200px;"><div class="th-inner">办理意见</div></th>
+								<th style="width: 140px;"><div class="th-inner">办理时间</div></th>
+								<th style="width: 140px;"><div class="th-inner">是否完成</div></th>
+							</tr>
+							</thead>
+							<tbody>
+							#for(t:hislist)
+							<tr>
+								<td>#(t.taskName)</td>
+								<td>#(t.assignee)</td>
+								<td>#(t.message)</td>
+								<td>#(t.endTime?t.endTime:"")</td>
+								<td>#if(t.endTime)<span style="color:green">已办理</span>#else<span style="color:red">未办理</span>#end</td>
+							</tr>
+							#end
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	#end
+#end
+
+<!--流程抄送按钮-->
+#define installFlowCCButton()
+	<div class="form-group">
+	    <label class="col-md-2 control-label">抄送</label>
+	    <div class="col-md-4">
+	    	<div class="input-group mar-btm col-md-12">
+	    		<input type="hidden" id="flowCCId" name="flowCC" class="form-control"  value="#(flowCC)">
+			    <input type="text" id="flowCCName" class="form-control"  value="#(flowCCName)" disabled>
+		        #if(view!="detail")
+		        	<span class="input-group-btn">
+		            	<button class="btn btn-primary" type="button" onclick="openSlectFlowCCDialog()">选择</button>
+		            </span>
+		        #end
+		    </div>
+	        <small class="help-block">请抄送人员合同</small>
+	    </div>
+	    <script>
+	    	function openSlectFlowCCDialog(){
+	    		pointLion.selectManyUser("orgid="+encodeURIComponent("#root"),$("#flowCCId").val(),function(data){
+    				$("#flowCCId").val(data.idData);
+    				$("#flowCCName").val(data.nameData);
+    			});
+	    	}
+	    </script>
+	</div>
+#end
+
+<!--加签操作-->
+#define installAddOtherPersonDoTask()
+	<div class="form-group">
+		<label class="col-md-2 control-label">是否需要增加其他人审批</label>
+		<div class="col-md-4">
+			<input id="needAddOtherAuditPersons" class="magic-radio" type="radio" name="#(OAConstants.WORKFLOW_OPEN_ADD_ASSIGNEE)" value="1" #if(ifNeedAddOtherAuditPersons=="1") checked #end onclick="checkAddOtherAuditPerson()">
+			<label for="needAddOtherAuditPersons">需要</label>
+			<input id="notNeedAddOtherAuditPersons" class="magic-radio" type="radio" name="#(OAConstants.WORKFLOW_OPEN_ADD_ASSIGNEE)" value="0" #if(ifNeedAddOtherAuditPersons!='1') checked #end>
+			<label for="notNeedAddOtherAuditPersons">不需要</label>
+		</div>
+	</div>
+	<div class="form-group addOtherAuditPersonDiv" style="display: none;">
+		<label class="col-md-2 control-label">需要增加的其他人员</label>
+		<div class="col-md-4">
+			<div class="input-group mar-btm col-md-12">
+				<input type="hidden" id="addOtherPersonAuditValues" name="addOtherAuditPersonValues" class="form-control"  value="">
+				<input type="hidden" id="addOtherPersonAuditUsernames" name="addOtherPersonAuditUsernames" class="form-control"  value="">
+				<input type="text" id="addOtherPersonAuditNames" class="form-control"  value="" disabled>
+					<span class="input-group-btn">
+		            	<button class="btn btn-primary" type="button" onclick="opernAddOtherPersonDoTaskDialog()">选择</button>
+		            </span>
+			</div>
+		</div>
+	</div>
+	<script>
+		function opernAddOtherPersonDoTaskDialog(){
+			pointLion.selectManyUser("orgid="+encodeURIComponent("#root"),$("#flowCCId").val(),function(data){
+				$("#addOtherPersonAuditValues").val(data.idData);
+				$("#addOtherPersonAuditUsernames").val(data.usernameData);
+				$("#addOtherPersonAuditNames").val(data.nameData);
+			});
+		}
+		function checkAddOtherAuditPerson(){
+			var value = $("input[name='#(OAConstants.WORKFLOW_OPEN_ADD_ASSIGNEE)']").val();
+			if(value=="1"){
+				$(".addOtherAuditPersonDiv").show();
+			}else{
+				$(".addOtherAuditPersonDiv").hide();
+			}
+		}
+	</script>
+#end
