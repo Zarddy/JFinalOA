@@ -53,32 +53,32 @@ public class WorkFlowService {
 	public static final SysMobileMessageService mobileMessageService = SysMobileMessageService.me;
 	/**
 	 * 创建新模型
-	 * @throws UnsupportedEncodingException 
+	 * @throws UnsupportedEncodingException
 	 * */
 	public void createModel(ProcessEngine pe,String name,String key) throws UnsupportedEncodingException{
 		RepositoryService repositoryService = pe.getRepositoryService();
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode editorNode = objectMapper.createObjectNode();
-        editorNode.put("id", "canvas");
-        editorNode.put("resourceId", "canvas");
-        ObjectNode stencilSetNode = objectMapper.createObjectNode();
-        stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
-        editorNode.put("stencilset", stencilSetNode);
-        Model modelData = repositoryService.newModel();
+		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectNode editorNode = objectMapper.createObjectNode();
+		editorNode.put("id", "canvas");
+		editorNode.put("resourceId", "canvas");
+		ObjectNode stencilSetNode = objectMapper.createObjectNode();
+		stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
+		editorNode.put("stencilset", stencilSetNode);
+		Model modelData = repositoryService.newModel();
 
-        ObjectNode modelObjectNode = objectMapper.createObjectNode();
-        modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, name);
-        modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
-        String description = StringUtils.defaultString("模型描述信息");
-        modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, description);
-        modelData.setMetaInfo(modelObjectNode.toString());
-        modelData.setName(name);
-        modelData.setKey(StringUtils.defaultString(key));
+		ObjectNode modelObjectNode = objectMapper.createObjectNode();
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, name);
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
+		String description = StringUtils.defaultString("模型描述信息");
+		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, description);
+		modelData.setMetaInfo(modelObjectNode.toString());
+		modelData.setName(name);
+		modelData.setKey(StringUtils.defaultString(key));
 
-        repositoryService.saveModel(modelData);
-        repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));
+		repositoryService.saveModel(modelData);
+		repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));
 	}
-	
+
 	/***
 	 * 部署模型
 	 * @param id
@@ -96,7 +96,7 @@ public class WorkFlowService {
 			BpmnModel bpmnModel = jsonConverter.convertToBpmnModel(editorNode);
 			BpmnXMLConverter xmlConverter = new BpmnXMLConverter();
 			byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel,"ISO-8859-1");
-			
+
 			String processName = modelData.getName();
 			if (!StringUtils.endsWith(processName, ".bpmn20.xml")){
 				processName += ".bpmn20.xml";
@@ -106,7 +106,7 @@ public class WorkFlowService {
 			Deployment deployment = repositoryService.createDeployment().name(modelData.getName())
 					.addInputStream(processName, in).deploy();
 //					.addString(processName, new String(bpmnBytes)).deploy();
-			
+
 			// 设置流程分类
 			List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).list();
 			for (ProcessDefinition processDefinition : list) {
@@ -130,8 +130,8 @@ public class WorkFlowService {
 	}
 	/***
 	 * 删除模型，留下版本最大的
-	 * @throws XMLStreamException 
-	 * @throws UnsupportedEncodingException 
+	 * @throws XMLStreamException
+	 * @throws UnsupportedEncodingException
 	 */
 	@Before(Tx.class)
 	public void deleteModelRemainMaxVersion() throws UnsupportedEncodingException, XMLStreamException{
@@ -145,7 +145,7 @@ public class WorkFlowService {
 		}
 		Page<ActReModel> list2 = ActReModel.dao.getCustomModelPage(1, 999999);//自定义流程的模型
 		for(ActReModel o:list2.getList()){
-				me.deleteModel(o.getId());
+			me.deleteModel(o.getId());
 		}
 //		//所有模型部署
 //		for(ActReModel o:list){
@@ -174,7 +174,7 @@ public class WorkFlowService {
 		}
 		return "无操作";
 	}
-	
+
 	/***
 	 * 转化为模型
 	 */
@@ -183,12 +183,12 @@ public class WorkFlowService {
 		RepositoryService repositoryService = FlowablePlugin.buildProcessEngine().getRepositoryService();
 		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(procDefId).singleResult();
 		InputStream bpmnStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(),
-		processDefinition.getResourceName());
+				processDefinition.getResourceName());
 		XMLInputFactory xif = XMLInputFactory.newInstance();
 		InputStreamReader in = new InputStreamReader(bpmnStream, "UTF-8");
 		XMLStreamReader xtr = xif.createXMLStreamReader(in);
 		BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
-	
+
 		BpmnJsonConverter converter = new BpmnJsonConverter();
 		ObjectNode modelNode = converter.convertToJson(bpmnModel);
 		org.flowable.engine.repository.Model modelData = repositoryService.newModel();
@@ -197,20 +197,20 @@ public class WorkFlowService {
 		modelData.setCategory(processDefinition.getCategory());//.getDeploymentId());
 		modelData.setDeploymentId(processDefinition.getDeploymentId());
 		modelData.setVersion(Integer.parseInt(String.valueOf(repositoryService.createModelQuery().modelKey(modelData.getKey()).count()+1)));
-	
+
 		ObjectNode modelObjectNode = new ObjectMapper().createObjectNode();
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, processDefinition.getName());
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, modelData.getVersion());
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, processDefinition.getDescription());
 		modelData.setMetaInfo(modelObjectNode.toString());
-	
+
 		repositoryService.saveModel(modelData);
-	
+
 		repositoryService.addModelEditorSource(modelData.getId(), modelNode.toString().getBytes("utf-8"));
-	
+
 		return modelData;
 	}
-	
+
 	/***
 	 * 读取资源，通过部署ID
 	 * @param procDefId
@@ -227,14 +227,14 @@ public class WorkFlowService {
 			procDefId = processInstance.getProcessDefinitionId();
 		}
 		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(procDefId).singleResult();
-		
+
 		String resourceName = "";
 		if (resType.equals("image")) {
 			resourceName = processDefinition.getDiagramResourceName();
 		} else if (resType.equals("xml")) {
 			resourceName = processDefinition.getResourceName();
 		}
-		
+
 		InputStream resourceAsStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), resourceName);
 		return resourceAsStream;
 	}
@@ -255,11 +255,11 @@ public class WorkFlowService {
 			try{
 				FlowablePlugin.buildProcessEngine().getRepositoryService().deleteDeployment(r.getStr("ID_"), true);
 			}catch(Exception e){
-				
+
 			}
 		}
 	}
-	
+
 	/***
 	 * 启动流程
 	 * @param id
@@ -280,9 +280,9 @@ public class WorkFlowService {
 	}
 	/***
 	 * 启动流程
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws ClassNotFoundException
 	 */
 	@Before(Tx.class)
 	@SuppressWarnings("rawtypes")
@@ -291,9 +291,9 @@ public class WorkFlowService {
 	}
 	/***
 	 * 启动流程,移动端，无法使用shiro---手机端使用
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws ClassNotFoundException
 	 */
 	@Before(Tx.class)
 	@SuppressWarnings("rawtypes")
@@ -308,8 +308,8 @@ public class WorkFlowService {
 		ProcessInstance procIns = FlowablePlugin.buildProcessEngine().getRuntimeService().startProcessInstanceByKey(defKey,id,var);
 		return procIns.getId();
 	}
-	
-	
+
+
 	/***
 	 * 完成任务
 	 */
@@ -328,9 +328,9 @@ public class WorkFlowService {
 		String pass = String.valueOf(var.get("pass"));
 		if(comment==null){comment="";}
 		if(Constants.FLOW_IF_AGREE_YES.equals(pass)){//如果同意
-			comment = "[同意]"+comment;
+			comment = "[同意] " + comment;
 		}else if(Constants.FLOW_IF_AGREE_NO.equals(pass)){//如果不同意
-			comment = "[不同意]"+comment;
+			comment = "[不同意] " + comment;
 		}
 		if(StrKit.notBlank(insid)&&StrKit.notBlank(comment)){
 			service.addComment(taskid, insid, comment);
@@ -441,10 +441,10 @@ public class WorkFlowService {
 			String assignee = r.getStr("assignee");
 			if(StrKit.notBlank(assignee)){
 				SysUser user  = SysUser.dao.getByUsername(assignee);
-				if(user!=null){
-					r.set("assignee", user.getName()+"["+assignee+"]");
+				if(user != null){
+					r.set("assignee", user.getName());
 				}else{
-					r.set("assignee", "无用户["+assignee+"]");
+					r.set("assignee", "未指定用户");
 				}
 			}else{
 				List<VTasklist> tl = VTasklist.dao.find("select * from v_tasklist t where t.TASKID='"+r.getStr("taskId")+"'");
@@ -461,7 +461,7 @@ public class WorkFlowService {
 					}else{
 						cl.add("无用户["+c+"]");
 					}
-					
+
 				}
 				r.set("assignee", StringUtils.join(cl,","));
 			}
@@ -475,14 +475,14 @@ public class WorkFlowService {
 		return taskList;
 //		return Db.find("SELECT t.assignee_,	u.name,	t.name_,	t.end_time_,	c.message_ FROM	sys_user u ,	act_hi_taskinst t LEFT JOIN act_hi_comment c ON t.id_ = c.task_id_ where u.username=t.ASSIGNEE_ AND t.proc_inst_id_ = '"+insid+"' ORDER BY t.end_time_ desc ");
 	}
-	
+
 	/***
 	 * 获取流程经办人数据
 	 */
 	public List<Record> getHisTaskParter(String insid){
 		return Db.find("select i.*,u.name from act_hi_identitylink i,sys_user u where u.username=i.USER_ID_ AND PROC_INST_ID_='"+insid+"'");
 	}
-	
+
 	/***
 	 * 根据流程实例id获取流程定义ID
 	 * @param insid
@@ -492,7 +492,7 @@ public class WorkFlowService {
 		Record proc = Db.findFirst("select * from act_hi_procinst p where p.PROC_INST_ID_=?",insid);
 		return proc.getStr("PROC_DEF_ID_");
 	}
-	
+
 	/***
 	 * 根据流程defkey获取流程定义名称
 	 * @param defKey
@@ -506,7 +506,7 @@ public class WorkFlowService {
 			return "";
 		}
 	}
-	
+
 	/***
 	 * 删除流程实例
 	 */
@@ -515,7 +515,7 @@ public class WorkFlowService {
 		Record run = Db.findFirst("select * from act_ru_execution t where t.PROC_INST_ID_='"+procid+"'");
 		if(run!=null){
 //			try{
-				pe.getRuntimeService().deleteProcessInstance(procid, "删除流程实例");
+			pe.getRuntimeService().deleteProcessInstance(procid, "删除流程实例");
 //			}catch(Exception e){
 //				e.printStackTrace();
 //			}
@@ -523,13 +523,13 @@ public class WorkFlowService {
 		Record his = Db.findFirst("select * from act_hi_procinst t where t.PROC_INST_ID_='"+procid+"'");
 		if(his!=null){
 //			try{
-				pe.getHistoryService().deleteHistoricProcessInstance(procid);
+			pe.getHistoryService().deleteHistoricProcessInstance(procid);
 //			}catch(Exception e){
 //				e.printStackTrace();
 //			}
 		}
 	}
-	
+
 	/***
 	 * 撤回流程
 	 */
@@ -547,8 +547,8 @@ public class WorkFlowService {
 		Db.update("UPDATE "+tableName+" SET if_complete = '"+Constants.IF_COMPLETE_YES+"' WHERE id = '"+id+"' ");//更新为已经完成
 		Db.update("UPDATE "+tableName+" SET if_agree = '"+ifAgree+"' WHERE id = '"+id+"' ");//是否同意
 	}
-	
-	
+
+
 	//---------------- mobile  zhouzhongyan --------------------
 	/**
 	 * 获取待办list
@@ -556,7 +556,7 @@ public class WorkFlowService {
 	 * @param username
 	 * @return
 	 */
-	
+
 	/**
 	 * 获取待办数目
 	 * @author 28995
@@ -578,9 +578,9 @@ public class WorkFlowService {
 
 		Record re = Db.findFirst(sql);
 		return Integer.parseInt(re.getStr("NUM"));
-		
+
 	}
-	
+
 	/***
 	 * 流程取回
 	 */
@@ -645,16 +645,16 @@ public class WorkFlowService {
 //        	e.printStackTrace();
 //        }
 //	}
-	
-	
+
+
 	/***
 	 * 组织必要的流程变量
 	 * @param var
 	 * @param username
 	 * @return
-	 * @throws ClassNotFoundException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
 	@SuppressWarnings("rawtypes")
 	public Map<String, Object> getVar(com.jfinal.plugin.activerecord.Model m ,Map<String, Object> var,String id,String username,String defkey){

@@ -16,7 +16,7 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 public class _newMapping_Kit {
 	
 	public static void mapping(ActiveRecordPlugin arp) {
-		
+		arp.addMapping("oa_apply_activation", "id", OaApplyActivation.class);
 	}
 }
 

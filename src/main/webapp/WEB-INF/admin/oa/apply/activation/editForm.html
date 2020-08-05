@@ -1,0 +1,73 @@
+<form id="editForm" class="panel-body form-horizontal form-padding">
+	<input type="hidden"  name="#(formModelName).id" class="form-control" value="#(o?o.id:'')">
+		<div class="form-group">
+			<label class="col-md-2 control-label">申请人</label>
+			<div class="col-md-4">
+				<input type="hidden"  name="#(formModelName).userid" class="form-control"  value="#(o?o.userid:'')">
+				<input type="text"  name="#(formModelName).applyer_name" class="form-control"  value="#(o?o.applyer_name:'')" readonly>
+			</div>
+			<label class="col-md-1 control-label">部门</label>
+			<div class="col-md-4">
+				<input type="hidden"  name="#(formModelName).org_id" class="form-control"  value="#(o?o.org_id:'')">
+				<input type="text"  name="#(formModelName).org_name" class="form-control"  value="#(o?o.org_name:'')" readonly>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">标题</label>
+			<div class="col-md-9">
+				<input type="text"  name="#(formModelName).title" class="form-control"  value="#(o?o.title:'')" #if(view=='detail') readonly #end>
+				<small class="help-block"></small>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">原因</label>
+			<div class="col-md-9">
+				<input type="text"  name="#(formModelName).reason" class="form-control"  value="#(o?o.reason:'')" #if(view=='detail') readonly #end>
+				<small class="help-block"></small>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">客户名称</label>
+			<div class="col-md-9">
+				<input type="text"  name="#(formModelName).client_name" class="form-control"  value="#(o?o.client_name:'')" #if(view=='detail') readonly #end>
+				<small class="help-block"></small>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">设备SN号</label>
+			<div class="col-md-9">
+				<input type="text"  name="#(formModelName).sn_code" class="form-control"  value="#(o?o.sn_code:'')" #if(view=='detail') readonly #end>
+				<small class="help-block"></small>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label">截止日期</label>
+			<div class="col-md-9">
+				<input type="text"  name="#(formModelName).deadline_time" class="form-control"  value="#(o?o.deadline_time:'')" #if(view=='detail') readonly #end>
+				<small class="help-block"></small>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<label class="col-md-2 control-label">描述</label>
+			<div class="col-md-9">
+				<input type="text"  name="#(formModelName).des" class="form-control"  value="#(o?o.des:'')" #if(view=='detail') readonly #end>
+				<small class="help-block"></small>
+			</div>
+		</div>
+
+	#if(view=='edit')
+	<div class="panel-footer">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-3">
+				<button class="btn btn-warning" type="reset" #if(view=='detail') disabled #end>重置</button>
+				<button class="btn btn-primary" type="submit" #if(view=='detail') disabled #end>保存</button>
+			</div>
+		</div>
+	</div>
+	#else
+
+	#end
+</form>

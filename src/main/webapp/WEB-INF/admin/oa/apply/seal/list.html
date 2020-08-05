@@ -61,7 +61,7 @@
 						//value：当前field的值，即id
 						//row：当前行的数据
 					   var a = '';
-					   if(value=='0'){//未提交
+					   if(typeof(value) == "undefined" || value=='0'){//未提交
 							a = a + '<a class="label label-table label-info" onclick="startProcess(\''+row.id+'\')" href="javascript:void(0);" >提交</a>&nbsp;';
 							a = a + '<a class="label label-table label-success" href="'+ctx+'/admin/oa/apply/seal/getEditPage?id='+row.id+'&view=detail" >查看</a>&nbsp;';
 							a = a + '<a class="label label-table label-success" href="'+ctx+'/admin/oa/apply/seal/getEditPage?id='+row.id+'&view=edit" >编辑</a>&nbsp;';
@@ -71,7 +71,6 @@
 						   a = a + '<a class="label label-table label-success" href="'+ctx+'/admin/oa/apply/seal/getEditPage?id='+row.id+'&view=detail" >查看</a>&nbsp;';
 						   if(row.if_complete=="0"){
 							   a = a + '<a class="label label-table label-danger" href="javascript:void(0);" onclick="callBack(\''+row.id+'\')" >撤回</a>&nbsp;';
-
 						   }
 					   }
 					   return a;
