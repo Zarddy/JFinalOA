@@ -38,12 +38,12 @@ public class OaApplyActivationService{
 		if(StrKit.notBlank(applyUser)){
 			sql = sql + " and o.applyer_name like '%"+applyUser+"%'";
 		}
-		sql = sql + " order by o.create_time desc";
+		sql = sql + " and o.status='1' order by o.create_time desc";
 		return Db.paginate(pnum, psize, " select * ", sql);
 	}
 	
 	/***
-	 * del
+	 * del 删除记录，只将status设为0，不删除记录
 	 * @param ids
 	 */
 	@Before(Tx.class)
@@ -51,7 +51,8 @@ public class OaApplyActivationService{
     	String idarr[] = ids.split(",");
     	for(String id : idarr){
     		OaApplyActivation o = me.getById(id);
-    		o.delete();
+    		o.setStatus("0");
+    		o.update();
     	}
 	}
 	

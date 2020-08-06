@@ -49,22 +49,6 @@ public abstract class BaseOaApplyActivation<M extends BaseOaApplyActivation<M>> 
 		return getStr("org_name");
 	}
 
-	public void setLeaderMessage(java.lang.String leaderMessage) {
-		set("leader_message", leaderMessage);
-	}
-	
-	public java.lang.String getLeaderMessage() {
-		return getStr("leader_message");
-	}
-
-	public void setLeader2Message(java.lang.String leader2Message) {
-		set("leader2_message", leader2Message);
-	}
-	
-	public java.lang.String getLeader2Message() {
-		return getStr("leader2_message");
-	}
-
 	public void setIfSubmit(java.lang.String ifSubmit) {
 		set("if_submit", ifSubmit);
 	}
@@ -129,6 +113,30 @@ public abstract class BaseOaApplyActivation<M extends BaseOaApplyActivation<M>> 
 		return getStr("title");
 	}
 
+	public void setClientName(java.lang.String clientName) {
+		set("client_name", clientName);
+	}
+
+	public java.lang.String getClientName() {
+		return getStr("client_name");
+	}
+
+	public void setSnCode(java.lang.String snCode) {
+		set("sn_code", snCode);
+	}
+
+	public java.lang.String getSnCode() {
+		return getStr("sn_code");
+	}
+
+	public void setDeadline(java.lang.String deadline) {
+		set("deadline", deadline);
+	}
+
+	public java.lang.String getDeadline() {
+		return getStr("deadline");
+	}
+
 	public void setDes(java.lang.String des) {
 		set("des", des);
 	}
@@ -137,36 +145,20 @@ public abstract class BaseOaApplyActivation<M extends BaseOaApplyActivation<M>> 
 		return getStr("des");
 	}
 
-	public void setReason(java.lang.String reason) {
-		set("reason", reason);
-	}
-	
-	public java.lang.String getReason() {
-		return getStr("reason");
+	public void setActivationCode(java.lang.String activationCode) {
+		set("activation_code", activationCode);
 	}
 
-	public void setSnCode(java.lang.String snCode) {
-		set("sn_code", snCode);
-	}
-	
-	public java.lang.String getSnCode() {
-		return getStr("sn_code");
+	public java.lang.String getActivationCode() {
+		return getStr("activation_code");
 	}
 
-	public void setDeadlineTime(java.lang.String deadlineTime) {
-		set("deadline_time", deadlineTime);
-	}
-	
-	public java.lang.String getDeadlineTime() {
-		return getStr("deadline_time");
+	public void setStatus(java.lang.String status) {
+		set("status", status);
 	}
 
-	public void setClientName(java.lang.String clientName) {
-		set("client_name", clientName);
-	}
-	
-	public java.lang.String getClientName() {
-		return getStr("client_name");
+	public java.lang.String getStatus() {
+		return getStr("status");
 	}
 
 }

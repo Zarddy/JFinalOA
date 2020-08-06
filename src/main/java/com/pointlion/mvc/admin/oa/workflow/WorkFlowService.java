@@ -332,7 +332,8 @@ public class WorkFlowService {
 		}else if(Constants.FLOW_IF_AGREE_NO.equals(pass)){//如果不同意
 			comment = "[不同意] " + comment;
 		}
-		if(StrKit.notBlank(insid)&&StrKit.notBlank(comment)){
+
+		if(StrKit.notBlank(insid) && StrKit.notBlank(comment)){
 			service.addComment(taskid, insid, comment);
 		}
 		service.claim(taskid, username);

@@ -102,7 +102,7 @@ public class OaApplyActivationController extends BaseController {
 		String insId = wfservice.startProcess(id, o,o.getTitle(),null);
     	o.setProcInsId(insId);
     	o.update();
-    	renderSuccess("submit success");
+    	renderSuccess("提交成功");
     }
     /***
      * callBack
@@ -115,10 +115,10 @@ public class OaApplyActivationController extends BaseController {
         	o.setIfSubmit(Constants.IF_SUBMIT_NO);
         	o.setProcInsId("");
         	o.update();
-    		renderSuccess("callback success");
+    		renderSuccess("撤回成功");
     	}catch(Exception e){
     		e.printStackTrace();
-    		renderError("callback fail");
+    		renderError("撤回失败");
     	}
     }
 }
