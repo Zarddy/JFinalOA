@@ -6,6 +6,10 @@
  */
 package com.pointlion.mvc.admin.sys.home;
 
+import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Record;
+import com.pointlion.mvc.admin.oa.workflow.WorkFlowService;
+import com.pointlion.mvc.admin.oa.workflow.WorkFlowUtil;
 import com.pointlion.mvc.admin.oa.workflow.flowtask.FlowTaskService;
 import com.pointlion.mvc.admin.sys.login.SessionUtil;
 import com.pointlion.mvc.common.base.BaseController;
@@ -14,7 +18,9 @@ import com.pointlion.mvc.common.utils.Constants;
 import com.pointlion.plugin.shiro.ShiroKit;
 import com.pointlion.plugin.shiro.ext.SimpleUser;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //import com.pointlion.mvc.admin.apply.resget.OaResGetConstants;
 //import com.pointlion.mvc.admin.bumph.BumphConstants;
@@ -34,6 +40,10 @@ public class HomeController extends BaseController {
      */
     public void getHomePage(){
 //    	SimpleUser user = ShiroKit.getLoginUser();
+
+		SimpleUser user = ShiroKit.getLoginUser();
+		String username = user.getUsername();
+		setAttrToDoList(username);//获取待办
     	//获取首页通知公告
     	renderIframe("/WEB-INF/admin/home/homePage.html");
     }
@@ -120,5 +130,37 @@ public class HomeController extends BaseController {
     public void getSiteMessageTipPage(){
     	renderIframe("/WEB-INF/admin/home/siteMessageTip.html");
     }
-    
+
+
+
+    // 代办任务数据获取功能
+	static WorkFlowService wfservice = WorkFlowService.me;
+	/***
+	 * 设定，待办，数据
+	 * @param username
+	 */
+	private void setAttrToDoList(String username){
+		Map<String,List<Record>> todoMap = new HashMap<String,List<Record>>();
+		int todoListCount = 0;
+		List<VTasklist> defkList = VTasklist.dao.find("select DEFKEY from v_tasklist t where (t.ASSIGNEE='"+username+"' or t.CANDIDATE='"+username+"') GROUP BY t.DEFKEY");
+		for(VTasklist t:defkList){
+			String defkey = t.getDEFKEY();
+			String tablename = WorkFlowUtil.getTablenameByDefkey(defkey);
+			if(StrKit.notBlank(tablename)){//如果属于固定流程
+				List<Record> todolist = wfservice.getToDoListByKey(tablename,defkey,username);
+				if(todolist!=null&&todolist.size()>0){
+					todoListCount = todoListCount + todolist.size();
+					todoMap.put(defkey, todolist);
+				}
+			}else{//自定义流程
+				List<Record> todolist = wfservice.getToDoListByKey(OaApplyCustom.tableName,defkey,username);
+				if(todolist!=null&&todolist.size()>0){
+					todoListCount = todoListCount + todolist.size();
+					todoMap.put(defkey, todolist);
+				}
+			}
+		}
+		setAttr("todoListCount", todoListCount);
+		setAttr("todoMap", todoMap);
+	}
 }

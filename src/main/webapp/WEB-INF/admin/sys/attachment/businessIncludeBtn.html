@@ -6,10 +6,6 @@
 #end
 <!-- 通用业务-附件按钮 -->
 #define installAttachment(businessId)
-		<a href="javascript:void(0);" onclick="doUploadAttachment_#(businessId)('#(businessId)')" style="position: relative;">
-			<button class="btn btn-warning" type="button">附件</button>
-			<span class="pull-right badge badge-success" style="position: absolute;right: -8px;top: -14px;" id="businessAttachmentCount_#(businessId)">0</span>
-		</a>
 		<script>
 			var view = "#(view?view:'')";
 			//打开附件列表

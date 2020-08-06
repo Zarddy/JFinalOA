@@ -40,11 +40,6 @@
 							                	<a href="javascript:void(0);" onclick="pointLion.openTaskHisListPage('#(procInsId)')" style="position: absolute;right: 80px">
 							                		<button class="btn btn-success" type="button">流转</button>
 							                	</a>
-							                	#if(o&&o.id)
-							                		<a href="#(ctx)/admin/oa/common/business/export?id=#(o.id)&type=finance" target="_blank">
-								                		<button class="btn btn-warning" type="button">导出</button>
-								                	</a>
-							                	#end
 							                </h3>
 							            </div>
 							            #render(pageUrl)
