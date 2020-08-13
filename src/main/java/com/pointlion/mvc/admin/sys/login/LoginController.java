@@ -41,7 +41,7 @@ public class LoginController extends BaseController {
 //    	ChineseNameUtil.generateUser();//自动生成模拟用户，每个单位下新建30个用户。并且修改组织机构名称（随机汉字单位名称）
     	this.createToken("loginToken");
     	Subject subject = ThreadContext.getSubject();
-    	if(subject.isAuthenticated()){//已经登录成功
+    	if(subject != null && subject.isAuthenticated()){//已经登录成功
     		SessionUtil.setUsernameToSession(this.getRequest(), ShiroKit.getUsername());
     		SysCustomSetting setting = SysCustomSetting.dao.getLoginUserCstSetting();
     		if(setting!=null&&setting.getNavColl().equals("0")){

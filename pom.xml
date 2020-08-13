@@ -7,40 +7,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JFinalOA Maven Webapp</name>
 	<url>http://maven.apache.org</url>
-	<profiles>
-		<profile>
-			<!-- 本地56环境 -->
-			<id>dev</id>
-			<properties>
-				<!-- <repository_url>http://</repository_url> -->
-				<db-url><![CDATA[jdbc:mysql://localhost:3306/jfinaloa?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&nullNamePatternMatchesAll=true&autoReconnect=true]]></db-url>
-				<db-name>jfinaloa</db-name>
-				<db-username>root</db-username>
-				<db-password>root</db-password>
-				<db-type>mysql</db-type>
-				<dev-model>true</dev-model>
-				<workspace-path>D:/Workspaces/Springboot/JFinalOA</workspace-path>
-				<log4j-level>debug</log4j-level>
-			</properties>
-			<!-- 默认激活本环境 -->
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-	</profiles>
-	<!-- <repositories>
-		<repository>
-			<id>nexus</id>
-			<name>nexus</name>
-			<url>${repository_url}:8080/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories> -->
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
@@ -256,18 +228,24 @@
 			<artifactId>dom4j</artifactId>
 			<version>2.1.1</version>
 		</dependency>
- 		<!-- <dependency>
-	        <groupId>com.jfinal</groupId>
-	        <artifactId>jfinal-undertow</artifactId>
-	        <version>1.4</version>
-	    </dependency> -->
+		<dependency>
+			<groupId>com.jfinal</groupId>
+			<artifactId>jfinal-undertow</artifactId>
+			<version>1.9</version>
+		</dependency>
 	    <!-- 如果需要 WebSocket 支持，再添加一个依赖，不开发 WebSocket 无需理会 -->
 <!-- 		<dependency>
 	        <groupId>io.undertow</groupId>
 	        <artifactId>undertow-websockets-jsr</artifactId>
 	        <version>2.0.16.Final</version>
 	    </dependency> -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
 	</dependencies>
+
 	<build>
 		<resources>
 			<resource>
@@ -294,7 +272,10 @@
 						<target>1.8</target>
 						<encoding>UTF-8</encoding>
 						<!-- java8 保留参数名编译参数 -->
-						<!-- compilerArgument>-parameters</compilerArgument -->
+						<compilerArgument>-parameters</compilerArgument>
+						<compilerArguments>
+							<verbose/>
+						</compilerArguments>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -315,14 +296,19 @@
 		</pluginManagement>
 	</build>
 
-
-
 	<repositories>
 		<!-- aliyun repository -->
 		<repository>
-			<id>aliyun</id>
-			<name>Team aliyun Repository</name>
+			<id>ali-maven</id>
 			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
 		</repository>
 		<!-- zfinfo -->
 		<repository>
