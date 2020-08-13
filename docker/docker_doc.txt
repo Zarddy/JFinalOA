@@ -1,0 +1,48 @@
+
+# 查看所有镜像
+docker images
+
+# 删除指定镜像
+docker rmi "image_id"
+
+# 查看所有容器
+docker container ls -a
+
+# 停止指定容器
+docker container stop "container_id"
+
+# 删除指定容器
+docker container rm "container_id"
+
+# 使用 Dockerfile 创建 容器
+docker build -t mcfun_project:v1.0.0 -f ./Dockerfile .
+
+
+# Dockerfile 内容
+FROM tomcat:8
+ADD ./JPointLion.war /usr/local/tomcat/webapps/
+CMD ["catalina.sh", "run"]
+
+
+
+
+
+
+# 第一步执行
+# 使用 Dockerfile 创建 容器
+docker build -t jfinaloa:v1.0.0 -f ./Dockerfile .
+
+
+# 第二步执行（即 start_mcapi.sh内容）启动成功
+mkdir log
+touch log/jfinaloa-v1.0.0.log
+
+
+
+# 运行容器
+
+#!/bin/bash
+# -p hostPort:containerPort
+nohup docker run -p 8083:8080 --name=jfinaloa --net=host jfinaloa:v1.0.0 > ./log/jfinaloa-v1.0.0.log &
+
+
