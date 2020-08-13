@@ -30,6 +30,27 @@
 			$('.form_datetime').datepicker({format: 'yyyy-mm-dd',weekStart: 1,todayBtn:  1,autoclose: 1,language:  'zh-CN',todayHighlight: 1,forceParse: 0,clearBtn: true }).on('changeDate',null);
 			$('#editForm').bootstrapValidator({
 	            fields: {
+					"#(formModelName).client_name":{
+						validators: {
+							notEmpty: {
+								message: '*客户名称不能为空'
+							}
+						}
+					},
+					"#(formModelName).sn_code":{
+						validators: {
+							notEmpty: {
+								message: '*SN号不能为空'
+							}
+						}
+					},
+					"#(formModelName).deadline":{
+						validators: {
+							notEmpty: {
+								message: '*请选择有效期'
+							}
+						}
+					},
 	            }
 	        }).on("success.form.bv", function (e) {
 	            save();
