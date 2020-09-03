@@ -156,9 +156,9 @@ body,
 /* NAVIGATION */
 /*======================================*/
 #mainnav-container {
-  box-shadow: 0 0 0 1px #d3dce8;
 }
 #mainnav {
+  box-shadow: 0 0 0 1px #d3dce8;
   background-color: #ffffff;
 }
 #mainnav .list-header {

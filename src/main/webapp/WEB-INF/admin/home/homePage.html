@@ -342,7 +342,20 @@
 
     });
 
-
+    var isPCBrowser = function() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone",
+            "SymbianOS", "Windows Phone",
+            "iPad", "iPod"];
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
 
     /***
      * 办理任务
@@ -351,11 +364,11 @@
     function doTask(taskid,id,defkey,o){
 
         console.log("点击doTask");
-
+        var _area = isPCBrowser() ? ['1000px', '620px'] : ['100%', '520px'];
         layer.open({
             type: 2,
             title: false, //不显示标题栏
-            area: ['1000px', '620px'],
+            area: _area,
             shade: 0.2,
             id: 'selectOneMenu', //设定一个id，防止重复弹出
             resize: false,

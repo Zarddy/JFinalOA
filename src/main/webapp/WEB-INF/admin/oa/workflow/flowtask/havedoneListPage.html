@@ -1,7 +1,7 @@
 <!-- 传递进来只有流程defkey -->
 #define makeHavedoneList(defkey)
                 <div id="page-content">
-			        <div class="col-sm-12 eq-box-sm">
+			        <div class="col-sm-12 eq-box-sm done-list-table">
 			        	<div class="panel">
 						    <div class="panel-body">
 						        <table id="pageTable_#(defkey)" class="demo-add-niftycheck" data-toolbar="#del,#add"
@@ -13,12 +13,7 @@
 			        </div>
                 </div>
 	<script>
-	var col_#(defkey) = [{
-	       field: 'checked',
-	       checkbox : true,
-	       align: 'center'
-	   },
-	   
+	var col_#(defkey) = [
 	   {
 	       field: 'id',
 	       title: '主键',
@@ -28,22 +23,25 @@
 	       field: 'applyer_name',
 	       title: '申请人',
 	       align: 'center',
+		   width: '100'
 	   },
 	   {
 	       field: 'org_name',
 	       title: '部门',
 	       align: 'center',
+		   width: '100'
 	   },
 	   {
 	       field: 'title',
 	       title: '标题',
 	       align: 'center',
+		   width: '240'
 	   },
 	   {
 	       field: 'if_submit',
 	       title: '是否提交',
 	       align: 'center',
-	       width:'50',
+	       width: '70',
 	       formatter:function(value,row,index){
 	           if(value=="1"){
 	        	   return "<span style='color:green'>已提交</span>";
@@ -56,6 +54,7 @@
 	       field: 'if_complete',
 	       title: '是否完成',
 	       align: 'center',
+		   width: '70',
 	       formatter:function(value,row,index){
 	           if(value=="1"){
 	        	   return "<span style='color:green'>已完成</span>";
@@ -68,6 +67,7 @@
 	       field: 'if_agree',
 	       title: '是否同意',
 	       align: 'center',
+		   width: '70',
 	       formatter:function(value,row,index){
 	    	   if(value=="1"){
 	        	   return "<span style='color:green;'>同意</span>";
@@ -82,6 +82,7 @@
 	       field: 'if_submit',
 	       title: '操作',
 	       align: 'left',
+		   width: '200',
 	       formatter:function(value,row,index){
 	           	//通过formatter可以自定义列显示的内容
 	           	//value：当前field的值，即id
@@ -141,12 +142,29 @@
 			$('#pageTable_#(defkey)').bootstrapTable(opt_#(defkey));
 			$('#pageTable_#(defkey)').bootstrapTable('hideColumn', 'id');
 		}
+
+		var isPCBrowser = function() {
+			var userAgentInfo = navigator.userAgent;
+			var Agents = ["Android", "iPhone",
+				"SymbianOS", "Windows Phone",
+				"iPad", "iPod"];
+			var flag = true;
+			for (var v = 0; v < Agents.length; v++) {
+				if (userAgentInfo.indexOf(Agents[v]) > 0) {
+					flag = false;
+					break;
+				}
+			}
+			return flag;
+		}
+
 		//打开详情页面
 		function openHavedoneBusinessPage_#(defkey)(id){
+			var _area = isPCBrowser() ? ['1000px', '620px'] : ['100%', '520px'];
 			layer.open({
 				  type: 2,
 				  title: false, //不显示标题栏
-				  area: ['1000px', '620px'],
+				  area: _area,
 				  shade: 0.2,
 				  id: 'selectOneMenu', //设定一个id，防止重复弹出
 				  resize: false,

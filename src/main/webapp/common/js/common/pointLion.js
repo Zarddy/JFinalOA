@@ -277,10 +277,11 @@ var pointLion = function(){
 		 * 打开公共流程历史任务列表页面
 		 */
 		var openTaskHisListPage = function(insid){
+			var _area = isPCBrowser() ? ['890px', '500px'] : ['100%', '400px'];
 			layer.open({
 				  type: 2,
 				  title: false, //不显示标题栏
-				  area: ['890px', '500px'],
+				  area: _area,
 				  shade: 0.2,
 				  id: 'taskHisListPage', //设定一个id，防止重复弹出
 				  resize: false,
@@ -288,11 +289,28 @@ var pointLion = function(){
 				  isOutAnim : false , 
 				  btnAlign: 'c',
 				  content: ctx+'/admin/oa/workflow/getWorkFlowHis?insid='+insid,
+				  shadeClose: true, //点击遮罩区域是否关闭页面
 				  success: function(layero){
 					  
 				  }
 			});
 		}
+
+		var isPCBrowser = function() {
+			var userAgentInfo = navigator.userAgent;
+			var Agents = ["Android", "iPhone",
+				"SymbianOS", "Windows Phone",
+				"iPad", "iPod"];
+			var flag = true;
+			for (var v = 0; v < Agents.length; v++) {
+				if (userAgentInfo.indexOf(Agents[v]) > 0) {
+					flag = false;
+					break;
+				}
+			}
+			return flag;
+		}
+
 		/***
 		 * 打开公共的附件上传界面
 		 */

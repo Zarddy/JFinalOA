@@ -835,7 +835,7 @@ h6,
   padding-top: 40px;
   top: 0;
   bottom: 0;
-  z-index: 4;
+  z-index: 10;
   min-height: 100%;
 }
 #mainnav {
@@ -1410,17 +1410,14 @@ h6,
 #container.mainnav-in #navbar,
 #container.mainnav-in #content-container,
 #container.mainnav-in #footer {
-  left: 220px;
 }
 #container.mainnav-out #content-container,
 #container.mainnav-in #mainnav-container {
   left: 0;
 }
 #container.mainnav-in .navbar-header {
-  left: -220px;
 }
 #container.mainnav-in .tgl-menu-btn {
-  right: 220px;
 }
 #container.mainnav-in #mainnav-menu-wrap {
   height: 100%;
@@ -4556,6 +4553,10 @@ a.list-group-item-dark:focus {
 }
 .modal-body {
   min-height: 90px;
+  padding: 0;
+}
+.modal-body > .bootbox-body {
+  margin: 10px;
 }
 .modal-body > .close,
 .modal-header > .close {
@@ -6230,7 +6231,6 @@ a.text-dark:focus {
   height: 0;
   left: 0;
   right: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 .panel-colorful > .panel-heading {
   border: 0;

@@ -47,13 +47,13 @@
 	
 	var col = [{field: 'checked', checkbox : true, align: 'center'},
 	   
-		   {field: 'applyer_name', title: '申请人姓名', align: 'center'},
-		   {field: 'org_name', title: '部门名称', align: 'center'},
-		   {field: 'des', title: '描述', align: 'center'},
-		   {field: 'sn_code', title: '设备SN号', align: 'center'},
-		   {field: 'deadline', title: '有效期至', align: 'center'},
-		   {field: 'client_name', title: '客户名称', align: 'center'},
-		{field: 'if_submit', title: '是否提交', align: 'center', width:'80',
+		   {field: 'applyer_name', title: '申请人姓名', align: 'center', width:'100'},
+		   {field: 'org_name', title: '部门名称', align: 'center', width:'100'},
+		   {field: 'des', title: '描述', align: 'center', width:'100'},
+		   {field: 'sn_code', title: '设备SN号', align: 'center', width:'100'},
+		   {field: 'deadline', title: '有效期至', align: 'center', width:'100'},
+		   {field: 'client_name', title: '客户名称', align: 'center', width:'100'},
+		{field: 'if_submit', title: '是否提交', align: 'center', width:'100',
 			formatter:function(value,row,index){
 				if(value=="1"){
 					return "<span style='color:green'>已提交</span>";
@@ -62,7 +62,7 @@
 				}
 			}
 		},
-		{field: 'if_complete', title: '是否完成', align: 'center', width:'80',
+		{field: 'if_complete', title: '是否完成', align: 'center', width:'100',
 			formatter:function(value,row,index){
 				if(value=="1"){
 					return "<span style='color:green'>已完成</span>";
@@ -71,7 +71,7 @@
 				}
 			}
 		},
-		{field: 'if_agree', title: '是否同意', align: 'center', width:'80',
+		{field: 'if_agree', title: '是否同意', align: 'center', width:'100',
 			formatter:function(value,row,index){
 				if(value=="1"){
 					return "<span style='color:green;'>同意</span>";
@@ -83,7 +83,7 @@
 			}
 		},
 	   
-	   {field: 'if_submit', title: '操作', align: 'left', width:'200',
+	   {field: 'if_submit', title: '操作', align: 'left', width:'100',
 	       formatter:function(value,row,index){
 	           	// //通过formatter可以自定义列显示的内容
 	           	// //value：当前field的值，即id
@@ -242,3 +242,9 @@
 		initTable();//初始化
 	});
 </script>
+
+<style>
+	.card-view {
+		margin: 3px 0;
+	}
+</style>

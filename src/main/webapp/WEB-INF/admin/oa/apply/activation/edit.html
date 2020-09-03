@@ -51,6 +51,13 @@
 							}
 						}
 					},
+					"#(formModelName).des":{
+						validators: {
+							notEmpty: {
+								message: '*请填写描述信息'
+							}
+						}
+					}
 	            }
 	        }).on("success.form.bv", function (e) {
 	            save();

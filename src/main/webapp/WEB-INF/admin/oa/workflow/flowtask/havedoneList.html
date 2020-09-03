@@ -34,6 +34,16 @@
 		font-weight: 900;
 		border:none !important;
 	}
+	.tab-base .tab-content {
+		padding: 0;
+		display: block;
+	}
+	.tab-content .panel-body {
+		padding: 0 !important;
+	}
+	.done-list-table {
+		padding: 0 !important;
+	}
 </style>
 
 
@@ -53,14 +63,14 @@
 				<div class="tab-content">
 					<!-- 已办Start -->
 					<div id="havedonelistPanel" class="tab-pane fade in active">
+						<ul class="nav nav-tabs">
+							#for(defkey:havedoneKeyList)
+							<li #if(for.index==0)class="active"#end>
+								<a data-toggle="tab" href="#havedone_#(defkey)">#(WorkFlowUtil.getDefNameByDefKey(defkey))</a>
+							</li>
+							#end
+						</ul>
 						<div class="tab-base tab-stacked-left" style="margin-top: 5px;">
-							<ul class="nav nav-tabs">
-								#for(defkey:havedoneKeyList)
-								<li #if(for.index==0)class="active"#end>
-									<a data-toggle="tab" href="#havedone_#(defkey)">#(WorkFlowUtil.getDefNameByDefKey(defkey))</a>
-								</li>
-								#end
-							</ul>
 							<div class="tab-content">
 								#for(defkey:havedoneKeyList)
 								<div id="havedone_#(defkey)" class="tab-pane fade #if(for.index==0)active #end in">
@@ -80,15 +90,30 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 	});
+	var isPCBrowser = function() {
+		var userAgentInfo = navigator.userAgent;
+		var Agents = ["Android", "iPhone",
+			"SymbianOS", "Windows Phone",
+			"iPad", "iPod"];
+		var flag = true;
+		for (var v = 0; v < Agents.length; v++) {
+			if (userAgentInfo.indexOf(Agents[v]) > 0) {
+				flag = false;
+				break;
+			}
+		}
+		return flag;
+	}
 	/***
 	 * 办理任务
 	 */
 	var nowTask;
 	function doTask(taskid,id,defkey,o){
+		var _area = isPCBrowser() ? ['1000px', '620px'] : ['100%', '520px'];
 		layer.open({
 			type: 2,
 			title: false, //不显示标题栏
-			area: ['1000px', '620px'],
+			area: _area,
 			shade: 0.2,
 			id: 'selectOneMenu', //设定一个id，防止重复弹出
 			resize: false,
